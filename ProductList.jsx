@@ -1,52 +1,109 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addItem } from './CartSlice';
-import './App.css';
-import { Link } from 'react-router-dom';
+// ProductList.jsx
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "./CartSlice";
 
-const products = [
-  { id: 1, category: 'Succulents', name: 'Aloe Vera', price: 10, image: '/images/aloe.jpg' },
-  { id: 2, category: 'Succulents', name: 'Echeveria', price: 12, image: '/images/echeveria.jpg' },
-  { id: 3, category: 'Foliage', name: 'Monstera', price: 25, image: '/images/monstera.jpg' },
-  { id: 4, category: 'Foliage', name: 'Fiddle Leaf Fig', price: 30, image: '/images/fig.jpg' },
-  { id: 5, category: 'Flowering', name: 'Orchid', price: 20, image: '/images/orchid.jpg' },
-  { id: 6, category: 'Flowering', name: 'Peace Lily', price: 18, image: '/images/lily.jpg' },
+const plants = [
+  {
+    id: 1,
+    name: "Snake Plant",
+    price: 15,
+    category: "Indoor",
+    image: "/images/snake-plant.jpg",
+  },
+  {
+    id: 2,
+    name: "Fiddle Leaf Fig",
+    price: 25,
+    category: "Indoor",
+    image: "/images/fiddle-leaf.jpg",
+  },
+  {
+    id: 3,
+    name: "Peace Lily",
+    price: 20,
+    category: "Indoor",
+    image: "/images/peace-lily.jpg",
+  },
+  {
+    id: 4,
+    name: "Aloe Vera",
+    price: 10,
+    category: "Succulents",
+    image: "/images/aloe-vera.jpg",
+  },
+  {
+    id: 5,
+    name: "Cactus",
+    price: 8,
+    category: "Succulents",
+    image: "/images/cactus.jpg",
+  },
+  {
+    id: 6,
+    name: "Jade Plant",
+    price: 12,
+    category: "Succulents",
+    image: "/images/jade-plant.jpg",
+  },
+  {
+    id: 7,
+    name: "Monstera",
+    price: 30,
+    category: "Tropical",
+    image: "/images/monstera.jpg",
+  },
+  {
+    id: 8,
+    name: "Bird of Paradise",
+    price: 35,
+    category: "Tropical",
+    image: "/images/bird-of-paradise.jpg",
+  },
+  {
+    id: 9,
+    name: "Orchid",
+    price: 20,
+    category: "Tropical",
+    image: "/images/orchid.jpg",
+  },
 ];
 
 const ProductList = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector(state => state.cart.items);
+  const cart = useSelector((state) => state.cart);
 
-  const handleAddToCart = (product) => {
-    dispatch(addItem(product));
+  const handleAddToCart = (plant) => {
+    dispatch(addItem(plant));
   };
 
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/products">Plants</Link> | <Link to="/cart">Cart ({cartItems.length})</Link>
-      </nav>
-      <h2>Our Plants</h2>
-      {['Succulents','Foliage','Flowering'].map(cat => (
-        <div key={cat}>
-          <h3>{cat}</h3>
-          <div className="product-category">
-            {products.filter(p => p.category === cat).map(product => (
-              <div key={product.id} className="product-card">
-                <img src={product.image} alt={product.name} width="150" />
-                <h4>{product.name}</h4>
-                <p>${product.price}</p>
-                <button 
-                  onClick={() => handleAddToCart(product)}
-                  disabled={cartItems.some(item => item.id === product.id)}
-                >
-                  {cartItems.some(item => item.id === product.id) ? "Added" : "Add to Cart"}
-                </button>
-              </div>
-            ))}
+    <div className="product-list">
+      {["Indoor", "Succulents", "Tropical"].map((category) => (
+        <div key={category}>
+          <h2>{category}</h2>
+          <div className="plant-category">
+            {plants
+              .filter((p) => p.category === category)
+              .map((plant) => (
+                <div key={plant.id} className="plant-card">
+                  <img src={plant.image} alt={plant.name} />
+                  <h3>{plant.name}</h3>
+                  <p>${plant.price}</p>
+                  <button
+                    disabled={cart.cartItems.find((item) => item.id === plant.id)}
+                    onClick={() => handleAddToCart(plant)}
+                  >
+                    {cart.cartItems.find((item) => item.id === plant.id)
+                      ? "Added"
+                      : "Add to Cart"}
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
       ))}
+      <div className="cart-icon">Cart Items: {cart.totalQuantity}</div>
     </div>
   );
 };
