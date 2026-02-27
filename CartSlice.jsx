@@ -1,49 +1,41 @@
-import { createSlice } from '@reduxjs/toolkit';
+// CartSlice.jsx
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  items: [],
+  cartItems: [],
   totalQuantity: 0,
-  totalPrice: 0,
 };
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
-    addItem(state, action) {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+    addItem: (state, action) => {
+      const existingItem = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
       if (!existingItem) {
-        state.items.push({ ...action.payload, quantity: 1 });
-        state.totalQuantity++;
-        state.totalPrice += action.payload.price;
+        state.cartItems.push({ ...action.payload, quantity: 1 });
+      }
+      state.totalQuantity += 1;
+    },
+    removeItem: (state, action) => {
+      const index = state.cartItems.findIndex((item) => item.id === action.payload);
+      if (index >= 0) {
+        state.totalQuantity -= state.cartItems[index].quantity;
+        state.cartItems.splice(index, 1);
       }
     },
-    removeItem(state, action) {
-      const index = state.items.findIndex(item => item.id === action.payload);
-      if (index !== -1) {
-        state.totalPrice -= state.items[index].price * state.items[index].quantity;
-        state.totalQuantity -= state.items[index].quantity;
-        state.items.splice(index, 1);
-      }
-    },
-    increaseQuantity(state, action) {
-      const item = state.items.find(item => item.id === action.payload);
+    updateQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const item = state.cartItems.find((item) => item.id === id);
       if (item) {
-        item.quantity++;
-        state.totalQuantity++;
-        state.totalPrice += item.price;
-      }
-    },
-    decreaseQuantity(state, action) {
-      const item = state.items.find(item => item.id === action.payload);
-      if (item && item.quantity > 1) {
-        item.quantity--;
-        state.totalQuantity--;
-        state.totalPrice -= item.price;
+        state.totalQuantity += quantity - item.quantity;
+        item.quantity = quantity;
       }
     },
   },
 });
 
-export const { addItem, removeItem, increaseQuantity, decreaseQuantity } = cartSlice.actions;
+export const { addItem, removeItem, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
