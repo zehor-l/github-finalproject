@@ -1,21 +1,28 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-}
-
-.App {
-  text-align: center;
-  background-image: url('./images/plant-background.jpg');
+/* App.css */
+.landing-page {
+  background-image: url("/images/plant-background.jpg");
   background-size: cover;
-  background-position: center;
   min-height: 100vh;
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 10px;
+.welcome-container h1 {
+  font-size: 3rem;
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-container button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background-color: #81c784;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+.welcome-container button:hover {
+  background-color: #66bb6a;
 }
